@@ -10,13 +10,20 @@ const createTables = async()=> {
       DROP TABLE IF EXISTS products;
       CREATE TABLE customers(
         id UUID PRIMARY KEY,
-        username VARCHAR(100) UNIQUE NOT NULL,
-        password VARCHAR(255)
+        username VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255),
+        is_Admin BOOLEAN DEFAULT false,
+        created_at TIMESTAMP DEFAULT now(),
+        updated_at TIMESTAMP DEFAULT now()
       );
       CREATE TABLE products(
         id UUID PRIMARY KEY,
-        name VARCHAR(100) UNIQUE NOT NULL,
-        price INTEGER NOT NULL
+        name VARCHAR(255) UNIQUE NOT NULL,
+        price INTEGER NOT NULL,
+        iamgeURL VARCHAR(255),
+        fruit BOOLEAN DEFAULT false,
+        animal_product BOOLEAN DEFAULT false,
+        home_made BOOLEAN DEFAULT false
       );
       CREATE TABLE carts(
         id UUID PRIMARY KEY,
@@ -36,11 +43,11 @@ const createTables = async()=> {
     return response.rows[0];
   }
   
-  const createProduct = async({ name, price })=> {
+  const createProduct = async({ name, price, iamgeURL, fruit, animal_product, home_made })=> {
     const SQL = `
-      INSERT INTO products(id, name, price) VALUES($1, $2, $3) RETURNING *
+      INSERT INTO products(id, name, price, iamgeURL, fruit, animal_product, home_made) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *
     `;
-    const response = await client.query(SQL, [uuid.v4(), name, price]);
+    const response = await client.query(SQL, [uuid.v4(), name, price, iamgeURL, fruit, animal_product, home_made]);
     return response.rows[0];
   }
 
@@ -52,7 +59,6 @@ const createTables = async()=> {
     return response.rows[0];
   }
   
-
   const fetchCustomers = async()=> {
     const SQL = `
       SELECT * FROM customers;
@@ -85,8 +91,8 @@ const createTables = async()=> {
     `;
     await client.query(SQL, [ id, customer_id ]);
   }
-  
-  
+
+ 
   module.exports = {
     client,
     createTables,

@@ -11,7 +11,7 @@ app.get('/api/customers', async(req, res, next)=> {
       next(ex);
     }
   });
-  
+
   app.get('/api/products', async(req, res, next)=> {
     try {
       res.send(await fetchProducts());
@@ -56,41 +56,38 @@ app.get('/api/customers', async(req, res, next)=> {
     await client.connect();
     console.log('connected to database');
     await createTables();
-    console.log('tables created');
   
-    const [jo, cathy, bow, blackSeedDounut, bodyScrub, sandlewoodCandle, honey] = await Promise.all([
+    const [jo, cathy, bow, blackSeedDounut, bodyScrub, sandlewoodCandle, soap] = await Promise.all([
       createCustomer({ username: 'jo', password: 'uxirjgb' }),
       createCustomer({ username: 'cathy', password: 'sieugbi!!' }),
       createCustomer({ username: 'bow', password: 'sfkdjhb' }),
-      createProduct({ name: 'blackSeedDounut', price: 5}),
-      createProduct({ name: 'bodyScrub', price: 5}),
-      createProduct({ name: 'sandlewoodCandle', price: 7}),
-      createProduct({ name: 'honey', price: 10}),
+      createProduct({ name: 'black_seed_dounut', price: 5, imageURL: "", home_made: true}),
+      createProduct({ name: 'body_scrub', price: 12, imageURL: "", home_made: true}),
+      createProduct({ name: 'sandalewood_candle', price: 49, imageURL: "", home_made: true}),
+      createProduct({ name: 'soap', price: 6, imageURL: "", home_made: true}),
+      createProduct({ name: 'moitureizer', price: 18, imageURL: "", home_made: true}),
+      createProduct({ name: 'honey', price: 10, imageURL: "", animal_product: true}),
+      createProduct({ name: 'goat_cheese', price: 7, imageURL: "", animal_product: true}),
+      createProduct({ name: 'raw_milk', price: 7, imageURL: "", animal_product: true}),
+      createProduct({ name: 'eggs', price: 3, imageURL: "", animal_product: true}),
+      createProduct({ name: 'meat', price: 7, imageURL: "", animal_product: true}),
+      createProduct({ name: 'watermelon', price: 9, imageURL: "", fruit: true}),
+      createProduct({ name: 'strawberries', price: 4, imageURL: "", fruit: true}),
+      createProduct({ name: 'golden_apples', price: 15, imageURL: "", fruit: true}),
+      createProduct({ name: 'pairs', price: 11, imageURL: "", fruit: true}),
+      createProduct({ name: 'peaches', price: 13, imageURL: "", fruit: true}),
+      createProduct({ name: 'blueberries', price: 6, imageURL: "", fruit: true}),
+      createProduct({ name: 'figs', price: 10, imageURL: "", fruit: true}),
+      createProduct({ name: 'lemon', price: 2, imageURL: "", fruit: true}),
+      createProduct({ name: 'cherries', price: 20, imageURL: "", fruit: true}),
+      createProduct({ name: 'oranges', price: 5, imageURL: "", fruit: true})
     ]);
-    console.log("jo:", jo);
-    
+    const customerCarts = await Promise.all([
+      createCart({ customer_id: jo.id, product_id: soap.id}),
+    ]);
 
-    console.log(jo.id);
-  
-    const customers = await fetchCustomers();
-    console.log(customers);
     const products = await fetchProducts();
     console.log(products);
-    console.log("bodyScrub:", sandlewoodCandle);
-  
-    const customerCarts = await Promise.all([
-      createCart({ customer_id: jo.id, product_id: honey.id}),
-      createCart({ customer_id: cathy.id, product_id: blackSeedDounut.id}),
-      createCart({ customer_id: bow.id, product_id: sandlewoodCandle.id}),
-      createCart({ customer_id: jo.id, product_id: bodyScrub.id}),
-    ]);
-  
-    console.log(customerCarts);
-  
-    console.log(await fetchCart(jo.id));
-  
-    await deleteCart(customerCarts[1].id);
-    console.log(await fetchCart(cathy.id));
   
     const port = process.env.PORT || 3000;
     app.listen(port, ()=> console.log(`listening on port ${port}`));
