@@ -1,4 +1,4 @@
-const { client, createTables, createCustomer, createProduct, fetchCustomers, fetchProducts, fetchCart, deleteCart, createCart } = require('./db');
+const { client, createTables, createCustomer, createProduct, fetchCustomers, fetchProducts, fetchCart, deleteCart, createCart, fetchCustomer, fetchProduct } = require('./db');
 const express = require('express');
 const app = express();
 
@@ -12,9 +12,28 @@ app.get('/api/customers', async(req, res, next)=> {
     }
   });
 
+
+app.get('/api/customer/:id', async(req, res, next)=> {
+    try {
+      res.send(await fetchCustomer(req.params.id));
+    }
+    catch(ex){
+      next(ex);
+    }
+  });
+
   app.get('/api/products', async(req, res, next)=> {
     try {
       res.send(await fetchProducts());
+    }
+    catch(ex){
+      next(ex);
+    }
+  });
+
+  app.get('/api/product/:id', async(req, res, next)=> {
+    try {
+      res.send(await fetchProduct(req.params.id));
     }
     catch(ex){
       next(ex);

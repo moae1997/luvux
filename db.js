@@ -66,6 +66,15 @@ const createTables = async()=> {
     const response = await client.query(SQL);
     return response.rows;
   }
+
+  const fetchCustomer = async(id) => {
+    const SQL = `
+      SELECT * FROM customers
+      WHERE id = $1
+    `;
+    const response = await client.query(SQL, [id]);
+    return response.rows[0];
+  }
   
   const fetchProducts = async()=> {
     const SQL = `
@@ -73,6 +82,15 @@ const createTables = async()=> {
     `;
     const response = await client.query(SQL);
     return response.rows;
+  }
+
+  const fetchProduct = async(id) => {
+    const SQL = `
+      SELECT * FROM products
+      WHERE id = $1
+    `;
+    const response = await client.query(SQL, [id]);
+    return response.rows[0];
   }
   
   const fetchCart = async(id)=> {
@@ -102,5 +120,7 @@ const createTables = async()=> {
     fetchCustomers,
     fetchProducts,
     fetchCart,
-    deleteCart
+    deleteCart,
+    fetchProduct,
+    fetchCustomer
   };
