@@ -1,6 +1,8 @@
-const { client, createTables, createCustomer, createProduct, fetchCustomers, fetchProducts, fetchCart, deleteCart, createCart, fetchCustomer, fetchProduct } = require('./db');
+const { client, createTables, createCustomer, createProduct, fetchCustomers, fetchProducts, fetchCart, deleteCart, createCart, fetchCustomer, fetchProduct, createCartHistory, fetchCartHistory } = require('./db');
 const express = require('express');
 const app = express();
+const cors = require('cors');
+app.use(cors())
 
 
 app.get('/api/customers', async(req, res, next)=> {
@@ -49,9 +51,27 @@ app.get('/api/customer/:id', async(req, res, next)=> {
     }
   });
 
+  app.get('/api/customers/:id/cartHistory', async(req, res, next)=> {
+    try {
+      res.send(await fetchCartHistory(req.params.id));
+    }
+    catch(ex){
+      next(ex);
+    }
+  });
+
   app.post('/api/customers/:id/cart', async(req, res, next)=> {
     try {
       res.status(201).send(await createCart({ customer_id: req.params.id, product_id: req.body.product_id}));
+    }
+    catch(ex){
+      next(ex);
+    }
+  });
+
+  app.post('/api/customers/:id/cartHistory', async(req, res, next)=> {
+    try {
+      res.status(201).send(await createCartHistory({ customer_id: req.params.id, product_id: req.body.product_id}));
     }
     catch(ex){
       next(ex);
@@ -103,6 +123,8 @@ app.get('/api/customer/:id', async(req, res, next)=> {
     ]);
     const customerCarts = await Promise.all([
       createCart({ customer_id: jo.id, product_id: soap.id}),
+      createCartHistory({customer_id: jo.id, product_id: soap.id}),
+      createCartHistory({customer_id: jo.id, product_id: soap.id})
     ]);
 
     const products = await fetchProducts();

@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 
 const createTables = async()=> {
     const SQL = `
+      DROP TABLE IF EXISTS cartHistory;
       DROP TABLE IF EXISTS carts;
       DROP TABLE IF EXISTS customers;
       DROP TABLE IF EXISTS products;
@@ -31,6 +32,12 @@ const createTables = async()=> {
         customer_id UUID REFERENCES customers(id) NOT NULL,
         CONSTRAINT unique_product_customer UNIQUE (product_id, customer_id)
       );
+      CREATE TABLE cartHistory(
+        id UUID PRIMARY KEY,
+        product_id UUID REFERENCES products(id) NOT NULL,
+        customer_id UUID REFERENCES customers(id) NOT NULL,
+        last_purchased TIMESTAMP DEFAULT now()
+      );
     `;
     await client.query(SQL);
   };
@@ -54,6 +61,14 @@ const createTables = async()=> {
   const createCart = async({ customer_id, product_id })=> {
     const SQL = `
       INSERT INTO carts(id, customer_id, product_id) VALUES($1, $2, $3) RETURNING *
+    `;
+    const response = await client.query(SQL, [uuid.v4(), customer_id, product_id]);
+    return response.rows[0];
+  }
+
+  const createCartHistory = async({ customer_id, product_id })=> {
+    const SQL = `
+      INSERT INTO cartHistory(id, customer_id, product_id) VALUES($1, $2, $3) RETURNING *
     `;
     const response = await client.query(SQL, [uuid.v4(), customer_id, product_id]);
     return response.rows[0];
@@ -102,6 +117,15 @@ const createTables = async()=> {
     return response.rows;
   }
 
+  const fetchCartHistory = async(id)=> {
+    const SQL = `
+      SELECT * FROM cartHistory
+      WHERE customer_id = $1
+    `;
+    const response = await client.query(SQL, [ id ]);
+    return response.rows;
+  }
+
   const deleteCart = async({id, customer_id})=> {
     const SQL = `
       DELETE FROM carts
@@ -122,5 +146,7 @@ const createTables = async()=> {
     fetchCart,
     deleteCart,
     fetchProduct,
-    fetchCustomer
+    fetchCustomer,
+    createCartHistory,
+    fetchCartHistory
   };
