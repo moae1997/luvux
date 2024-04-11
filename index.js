@@ -1,8 +1,54 @@
-const { client, createTables, createCustomer, createProduct, fetchCustomers, fetchProducts, fetchCart, deleteCart, createCart, fetchCustomer, fetchProduct, createCartHistory, fetchCartHistory } = require('./db');
+const { client, createTables, createCustomer, createProduct, fetchCustomers, fetchProducts, fetchCart, deleteCart, createCart, fetchCustomer, fetchProduct, createCartHistory, fetchCartHistory, fetchCustomerEmail, findCustomerByToken } = require('./db');
 const express = require('express');
 const app = express();
 const cors = require('cors');
-app.use(cors())
+app.use(cors());
+app.use(express.json());
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const SECRET = process.env.JWT || "fmyumchsymxgnbfgtmugfnym";
+
+
+const isLoggedIn = async(req, res, next)=> {
+    try {
+      req.customer = await findCustomerByToken(req.headers.authorization);
+      next();
+    }
+    catch(ex){
+        next(ex);
+    }
+  };
+
+app.post('/api/register', async(req,res,next)=> {
+    try {
+        const checkCustomer = await fetchCustomerEmail(req.body.email);
+        if(!checkCustomer) {
+            const newCostomer = await createCustomer(req.body);
+        const token = jwt.sign(newCostomer.id, SECRET);
+        res.send({token, newCostomer});
+        } else {
+            res.send("try loggin in!")
+        }
+    } catch(ex){
+        next(ex); 
+    } 
+});
+
+app.post('/api/login', async(req,res,next)=> {
+    try {
+        const checkCustomer = await fetchCustomerEmail(req.body.email);
+        if(!checkCustomer) {
+            res.send("Sorry not a customer, try signing up");
+        } else if (!(await bcrypt.compare(req.body.password, checkCustomer.password))) {
+            res.send("try loggin in!")
+        } else {
+            const token = jwt.sign(checkCustomer.id, SECRET);
+            res.send({token, checkCustomer});
+        }
+    } catch(ex){
+        next(ex); 
+    } 
+});
 
 
 app.get('/api/customers', async(req, res, next)=> {
@@ -97,9 +143,9 @@ app.get('/api/customer/:id', async(req, res, next)=> {
     await createTables();
   
     const [jo, cathy, bow, blackSeedDounut, bodyScrub, sandlewoodCandle, soap] = await Promise.all([
-      createCustomer({ username: 'jo', password: 'uxirjgb' }),
-      createCustomer({ username: 'cathy', password: 'sieugbi!!' }),
-      createCustomer({ username: 'bow', password: 'sfkdjhb' }),
+      createCustomer({ email: 'jo', password: 'uxirjgb', name: "Ahmed" }),
+      createCustomer({ email: 'cathy', password: 'sieugbi!!', name: "Ahmed" }),
+      createCustomer({ email: 'bow', password: 'sfkdjhb', name: "Ahmed"  }),
       createProduct({ name: 'black_seed_dounut', price: 5, imageURL: "", home_made: true}),
       createProduct({ name: 'body_scrub', price: 12, imageURL: "", home_made: true}),
       createProduct({ name: 'sandalewood_candle', price: 49, imageURL: "", home_made: true}),

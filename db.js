@@ -2,6 +2,9 @@ const pg = require('pg');
 const client = new pg.Client('postgres://localhost/luvux_db');
 const uuid = require('uuid');
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const SECRET = process.env.JWT || "fmyumchsymxgnbfgtmugfnym";
+console.log(SECRET);
 
 const createTables = async()=> {
     const SQL = `
@@ -11,8 +14,9 @@ const createTables = async()=> {
       DROP TABLE IF EXISTS products;
       CREATE TABLE customers(
         id UUID PRIMARY KEY,
-        username VARCHAR(255) UNIQUE NOT NULL,
-        password VARCHAR(255),
+        name VARCHAR(100),
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
         is_Admin BOOLEAN DEFAULT false,
         created_at TIMESTAMP DEFAULT now(),
         updated_at TIMESTAMP DEFAULT now()
@@ -42,11 +46,11 @@ const createTables = async()=> {
     await client.query(SQL);
   };
 
-  const createCustomer = async({ username, password })=> {
+  const createCustomer = async({ email, password, name, is_Admin })=> {
     const SQL = `
-      INSERT INTO customers(id, username, password) VALUES($1, $2, $3) RETURNING *
+      INSERT INTO customers(id, name, email, password, is_Admin) VALUES($1, $2, $3, $4, $5) RETURNING *
     `;
-    const response = await client.query(SQL, [uuid.v4(), username, await bcrypt.hash(password, 5)]);
+    const response = await client.query(SQL, [uuid.v4(), name, email, await bcrypt.hash(password, 5), is_Admin]);
     return response.rows[0];
   }
   
@@ -88,6 +92,15 @@ const createTables = async()=> {
       WHERE id = $1
     `;
     const response = await client.query(SQL, [id]);
+    return response.rows[0];
+  }
+
+  const fetchCustomerEmail = async(email) => {
+    const SQL = `
+      SELECT * FROM customers
+      WHERE email = $1
+    `;
+    const response = await client.query(SQL, [email]);
     return response.rows[0];
   }
   
@@ -134,6 +147,33 @@ const createTables = async()=> {
     await client.query(SQL, [ id, customer_id ]);
   }
 
+  const findCustomerByToken = async(token) => {
+    let id;
+    try {
+      const payload = await jwt.verify(token, SECRET);
+      id = payload.id;
+      console.log(payload)
+    }
+    catch(ex){
+      const error = Error('not authorized');
+      error.status = 401;
+      throw error;
+    }
+    const SQL = `
+      SELECT id, email
+      FROM customers
+      WHERE id = $1
+    `;
+    const response = await client.query(SQL, [id]);
+    if(!response.rows.length){
+      const error = Error('not authorized');
+      error.status = 401;
+      throw error;
+    }
+    return response.rows[0];
+  
+  }
+
  
   module.exports = {
     client,
@@ -148,5 +188,7 @@ const createTables = async()=> {
     fetchProduct,
     fetchCustomer,
     createCartHistory,
-    fetchCartHistory
+    fetchCartHistory,
+    fetchCustomerEmail,
+    findCustomerByToken
   };
