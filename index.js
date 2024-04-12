@@ -1,4 +1,4 @@
-const { client, createTables, createCustomer, createProduct, fetchCustomers, fetchProducts, fetchCart, deleteCart, createCart, fetchCustomer, fetchProduct, createCartHistory, fetchCartHistory, fetchCustomerEmail, findCustomerByToken } = require('./db');
+const { client, createTables, createCustomer, createProduct, fetchCustomers, fetchProducts, fetchCart, deleteCart, createCart, fetchCustomer, fetchProduct, createCartHistory, fetchCartHistory, fetchCustomerEmail } = require('./db');
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -8,16 +8,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const SECRET = process.env.JWT || "fmyumchsymxgnbfgtmugfnym";
 
-
-const isLoggedIn = async(req, res, next)=> {
-    try {
-      req.customer = await findCustomerByToken(req.headers.authorization);
-      next();
-    }
-    catch(ex){
-        next(ex);
-    }
-  };
 
 app.post('/api/register', async(req,res,next)=> {
     try {
@@ -143,7 +133,7 @@ app.get('/api/customer/:id', async(req, res, next)=> {
     await createTables();
   
     const [jo, cathy, bow, blackSeedDounut, bodyScrub, sandlewoodCandle, soap] = await Promise.all([
-      createCustomer({ email: 'jo', password: 'uxirjgb', name: "Ahmed" }),
+      createCustomer({ email: 'jo@ly.com', password: 'uxirjgb', name: "jo" }),
       createCustomer({ email: 'cathy', password: 'sieugbi!!', name: "Ahmed" }),
       createCustomer({ email: 'bow', password: 'sfkdjhb', name: "Ahmed"  }),
       createProduct({ name: 'black_seed_dounut', price: 5, imageURL: "", home_made: true}),

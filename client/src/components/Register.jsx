@@ -1,12 +1,14 @@
 import React from "react";
 import { useState } from "react";
 import { Register } from "./Api";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterForm() {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
+    const navigate = useNavigate();
 
 
     async function handleRegister(event) {
@@ -15,11 +17,11 @@ export default function RegisterForm() {
             name: name,
             email: email,
             password: pass
-        }).then((result)=>{
-            localStorage.setItem("token", result.token);
+        }).then(()=>{
             setName("")
             setEmail("")
             setPass("")
+            navigate("/login")
         })
       }
 

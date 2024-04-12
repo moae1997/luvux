@@ -1,11 +1,13 @@
 import React from "react";
 import { useState } from "react";
 import { Login } from "./Api";
+import { useNavigate } from "react-router-dom";
 
-export default function LoginForm() {
+export default function LoginForm({setToken, setUser}) {
 
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
+    const navigate = useNavigate();
 
     async function handleLogin(event) {
         event.preventDefault();
@@ -13,9 +15,11 @@ export default function LoginForm() {
             email: email,
             password: pass
         }).then((result)=>{
-            console.log(result);
+            setToken(result.token);
+            setUser(result.checkCustomer.id);
             setEmail("")
             setPass("")
+            navigate("/account")
         })
       }
 

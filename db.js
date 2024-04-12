@@ -147,32 +147,6 @@ const createTables = async()=> {
     await client.query(SQL, [ id, customer_id ]);
   }
 
-  const findCustomerByToken = async(token) => {
-    let id;
-    try {
-      const payload = await jwt.verify(token, SECRET);
-      id = payload.id;
-      console.log(payload)
-    }
-    catch(ex){
-      const error = Error('not authorized');
-      error.status = 401;
-      throw error;
-    }
-    const SQL = `
-      SELECT id, email
-      FROM customers
-      WHERE id = $1
-    `;
-    const response = await client.query(SQL, [id]);
-    if(!response.rows.length){
-      const error = Error('not authorized');
-      error.status = 401;
-      throw error;
-    }
-    return response.rows[0];
-  
-  }
 
  
   module.exports = {
@@ -189,6 +163,5 @@ const createTables = async()=> {
     fetchCustomer,
     createCartHistory,
     fetchCartHistory,
-    fetchCustomerEmail,
-    findCustomerByToken
+    fetchCustomerEmail
   };

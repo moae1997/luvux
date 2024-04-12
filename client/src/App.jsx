@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import axios from 'axios';
-import Home from './components/Home';
-import RegisterForm from './components/Register';
-import LoginForm from './components/LoginForm';
+import Routs from './components/Routs'
+
 
 function App() {
 
   
   return (
     <>
-      <Home />
-      <RegisterForm/>
-      <LoginForm />
+    <Routs/>
     </>
   )
 }
 
 export default App
+
+
