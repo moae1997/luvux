@@ -2,12 +2,12 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { FetchProduct } from "./Api";
 
-export default function SingleProduct({product}) {
+export default function SingleHistory({historyProduct}) {
 
     const [item, setItem] = useState({});
 
     useEffect(()=>{
-        FetchProduct(product).then(setItem);
+        FetchProduct(historyProduct).then(setItem);
     },[])
 
     async function buyNow() {
@@ -18,7 +18,7 @@ export default function SingleProduct({product}) {
         <>
             <div>
                 {item.name}
-                <button onClick={buyNow}>Buy Now</button>
+                <button onClick={buyNow}>Buy Again</button>
             </div>
         </>
     )

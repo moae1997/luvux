@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-export default function Account({user, setToken}) {
+export default function Account({user, setToken, setHistoryProduct}) {
 
     const [history, setHistory] = useState([]);
     const navigate = useNavigate();
@@ -29,6 +29,11 @@ export default function Account({user, setToken}) {
         setToken(null);
     }
 
+    async function fectchItem(historyID) {
+        setHistoryProduct(historyID);
+        navigate("/producthistory");
+    }
+
     return (
         <>
             <button onClick={goToProducts}>products</button>
@@ -37,7 +42,8 @@ export default function Account({user, setToken}) {
             <div>
                 {history.map((history)=>{
                     return <div key={history.id}>
-                        <h1>{history.product_id}</h1>
+                        <p>ProductID:{history.product_id}</p>
+                    <button onClick={()=>{fectchItem(history.product_id)}}>Click to see</button>
                     </div>
                 })}
             </div>

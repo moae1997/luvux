@@ -25,7 +25,11 @@ export default function Home({user, token}) {
     }
 
     async function buyNow() {
-        
+        if (token) {
+            setAddedtoCart("Thank you!! Your order is on the way!")
+        }else {
+            setAddedtoCart("Please loggin before you buy!");
+        }
     }
 
     return (

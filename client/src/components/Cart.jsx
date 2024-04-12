@@ -18,6 +18,10 @@ export default function Cart({user, setProduct}) {
 
     }
 
+    async function buyNow() {
+        
+    }
+
     return(
         <>
             <div>
@@ -28,6 +32,7 @@ export default function Cart({user, setProduct}) {
                     </div>
                 })}
             </div>
+            <button onClick={buyNow}>Buy All Now</button>
         </>
     )
 }
