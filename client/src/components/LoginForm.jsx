@@ -24,6 +24,7 @@ export default function LoginForm({setToken, setUser}) {
       }
 
       async function handleClick() {
+        navigate("/")
       }
 
 

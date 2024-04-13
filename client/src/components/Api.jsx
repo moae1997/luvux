@@ -10,6 +10,7 @@ export async function FetchProducts() {
           pathforapi + "products"
         ); 
         const result = await response.json(); 
+        console.log(result);
         return result;
       } catch (error) {
         return error;
@@ -98,6 +99,22 @@ export async function MakeCart(customerID, user) {
           }
 }
 
+export async function UpdateCountCart(cartID, num) {
+  try {
+      const response = await fetch(pathforapi + `cart/${cartID}`, {
+      method: "PATCH",    
+      headers: { 
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({number: num})
+    });
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+          return error;
+        }
+}
+
 export async function FetchProduct(productID) {
     try {
         const response = await fetch(
@@ -109,3 +126,18 @@ export async function FetchProduct(productID) {
         return error;
       }
 }
+
+export async function removeProduct(userID, cartID) {
+
+  try { 
+      await fetch(pathforapi + `customers/${userID}/cart/${cartID}`, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+          return error;
+        }
+}
+

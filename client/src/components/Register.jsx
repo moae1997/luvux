@@ -26,6 +26,7 @@ export default function RegisterForm() {
       }
 
       async function handleClick() {
+        navigate("/")
       }
 
 

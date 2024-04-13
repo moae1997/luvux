@@ -34,6 +34,7 @@ const createTables = async()=> {
         id UUID PRIMARY KEY,
         product_id UUID REFERENCES products(id) NOT NULL,
         customer_id UUID REFERENCES customers(id) NOT NULL,
+        how_many INTEGER DEFAULT 1,
         CONSTRAINT unique_product_customer UNIQUE (product_id, customer_id)
       );
       CREATE TABLE cartHistory(
@@ -130,6 +131,17 @@ const createTables = async()=> {
     return response.rows;
   }
 
+  const UpdateCart = async({cart_id, number})=> {
+    const SQL = `
+    UPDATE carts
+    SET how_many= $1
+    WHERE id = $2 
+    RETURNING *;
+    `;
+    const response = await client.query(SQL, [ number, cart_id ]);
+    return response.rows[0];
+  }
+
   const fetchCartHistory = async(id)=> {
     const SQL = `
       SELECT * FROM cartHistory
@@ -163,5 +175,6 @@ const createTables = async()=> {
     fetchCustomer,
     createCartHistory,
     fetchCartHistory,
-    fetchCustomerEmail
+    fetchCustomerEmail,
+    UpdateCart
   };
