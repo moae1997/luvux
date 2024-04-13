@@ -73,9 +73,9 @@ export default function Home({user, token, setToken}) {
 
     return (
         <>
-            <div>
-                <h1>LUVUX Farm Store</h1>
-                <nav>
+            <div className="mainDiv">
+                <h1 className="homeTitle">LUVUX Farm Store</h1>
+                <nav className="homeNavBut">
                     {(token)? <div>
                         <button onClick={handleLogout}>logout</button>
                     </div>: <div>
@@ -84,16 +84,21 @@ export default function Home({user, token, setToken}) {
                     </div>}
                     <button onClick={goToCart}>Cart</button>
                 </nav>
-                <h1>{addedtoCart}</h1>
-                {products.map((product)=>{
-                    return <div key={product.id}>
+                <h1 className="homeErrormes">{addedtoCart}</h1>
+                <div className="homeProdDivCont">
+                {products  
+                .map((product)=>{
+                    return <div key={product.id} className="homeProductDiv">
                         <img src={product.iamgeurl} alt="product image" width="200" height="200"/>
-                        <h1>{product.name}</h1>
+                        <h3>ID: {product.id}</h3>
+                        <h2>{product.fruit}</h2>
+                        <h2>{product.name}</h2>
                         <h2>${product.price}</h2>
                         <button onClick={()=>{addToCart(product.id)}}>Add to Cart</button>
                         <button onClick={()=>{buyNow(product.id)}}>Buy Now</button>
                     </div>
                 })}
+                </div>
             </div>
         </>
     )

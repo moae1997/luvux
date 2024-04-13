@@ -35,8 +35,8 @@ export default function Account({user, setToken, setHistoryProduct}) {
             <button onClick={goToProducts}>products</button>
             <button onClick={goToCart}>Cart</button>
             <button onClick={handleLogout}>logout</button>
-            <h1>Your Product History</h1>
-            <div>
+            <h1 className="homeTitle">Your Product History</h1>
+            <div className="historyDiv">
                 {history.map((history)=>{
                     return <div key={history.id}>
                         <p>ProductID: {history.product_id}</p>

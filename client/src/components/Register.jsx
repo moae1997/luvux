@@ -33,10 +33,10 @@ export default function RegisterForm() {
 
     return <>
         <div>
-            <form onSubmit={handleRegister}>
+            <form onSubmit={handleRegister} className="loginForm">
                 <label>Name:<input type="text" value={name} onChange={(e) => setName(e.target.value)} required/></label>
-                <label>Email:<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required/></label>
-                <label>Pass:<input type="password" value={pass} onChange={(e) => setPass(e.target.value)} required/></label>
+                <label>Email: <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required/></label>
+                <label>Pass:    <input type="password" value={pass} onChange={(e) => setPass(e.target.value)} required/></label>
                 <button type="submit">Submit</button>
                 <button onClick={handleClick}>Go Back</button>
             </form>

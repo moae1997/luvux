@@ -14,10 +14,10 @@ export default function SingleHistory({historyProduct}) {
 
     return (
         <>
-            <div>
+            <div className="singleDiv">
                 <img src={item.iamgeurl} alt="soap" width="300" height="300" />
-                <h1>{item.name}</h1>
-                <p>${item.price}</p>
+                <h2>{item.name}</h2>
+                <h2>${item.price}</h2>
                 <button onClick={()=>{
                    return navigate("/account")
                 }}>Go Back</button>

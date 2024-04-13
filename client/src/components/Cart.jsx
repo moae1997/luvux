@@ -62,12 +62,12 @@ export default function Cart({user, setProduct}) {
 
     return(
         <>
-            <h1>{buymessage}</h1>
-            <div>
+            <h1 className="homeErrormes">{buymessage}</h1>
+            <div className="cartDiv">
                 {cartItem.map((item)=>{
                     return <div key={item.id}>
-                    <p>ProductID: {item.product_id}</p>
-                    <p>Quantity: {item.how_many}</p>
+                    <h2>ProductID: {item.product_id}</h2>
+                    <h2>Quantity: {item.how_many}</h2>
                     <button onClick={()=>{fectchItem(item.product_id)}}>Click to See</button>
                     <button onClick={()=>{Update(item.id, item.how_many)}}>Decrease Quantity</button>
                     <button onClick={()=>{UpdatePlus(item.id, item.how_many)}}>Increase Quantity</button>

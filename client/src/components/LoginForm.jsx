@@ -30,10 +30,10 @@ export default function LoginForm({setToken, setUser}) {
 
     return (
         <>
-            <div>
-                <form onSubmit={handleLogin}>
+            <div className="loginDiv">
+                <form onSubmit={handleLogin} className="loginForm">
                     <label>Email:<input type="email" value={email} onChange={(e) => setEmail(e.target.value)}/></label>
-                    <label>Pass:<input type="password" value={pass} onChange={(e) => setPass(e.target.value)}/></label>
+                    <label>Pass:  <input type="password" value={pass} onChange={(e) => setPass(e.target.value)}/></label>
                     <button type="submit">Login</button>
                      <button onClick={handleClick}>Go Back</button>
                 </form>

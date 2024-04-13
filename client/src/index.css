@@ -13,6 +13,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Mooli&display=swap');
+
+* {
+  font-family: "Mooli", sans-serif;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -28,6 +34,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: lightsalmon;
 }
 
 h1 {
@@ -65,4 +72,89 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+button {
+    margin: 5px;
+    background-image: url("https://cdn.pixabay.com/photo/2016/07/14/09/04/texture-1516370_1280.jpg");
+    box-shadow: 1px 2px 5px whitesmoke;
+}
+
+button:hover {
+  color: goldenrod;
+  box-shadow: 1px 2px 5px black;
+}
+
+.homeTitle {
+  text-shadow: 1px 2px 3px gray;
+}
+
+.homeProdDivCont {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.homeProductDiv {
+  margin: 10px;
+  padding: 5px;
+  box-shadow: 1px 2px 5px gray;
+}
+
+.homeProductDiv img {
+  border-radius: 50%;
+  box-shadow: 1px 2px 5px whitesmoke;
+}
+
+.homeProductDiv h2, h3 {
+  text-shadow: 1px 2px 3px gray;
+}
+
+.loginForm{
+  display: grid;
+  padding: 10px;
+  box-shadow: 1px 2px 5px gray;
+}
+
+.loginForm label {
+  font-size: 3vh;
+}
+.loginForm input {
+  font-size: 2.5vh;
+}
+
+.homeErrormes {
+  color: brown;
+  text-shadow: 1px 2px 3px gray;
+  background-image: url("https://cdn.pixabay.com/photo/2016/11/29/01/54/wood-1866667_1280.jpg");
+}
+
+.cartDiv {
+  padding: 15px;
+  box-shadow: 1px 2px 5px whitesmoke;
+  margin-bottom: 15px;
+}
+
+.cartDiv h2 {
+  text-shadow: 1px 2px 3px gray;
+}
+
+.historyDiv {
+  box-shadow: 1px 2px 5px whitesmoke;
+  padding: 10px;
+}
+
+.historyDiv p {
+  text-shadow: 1px 2px 3px gray;
+}
+
+.singleDiv {
+  box-shadow: 1px 2px 5px whitesmoke;
+  padding: 15px;
+}
+.singleDiv img {
+  border-radius: 50%;
+  box-shadow: 1px 2px 5px whitesmoke;
+}
+.singleDiv h2 {
+  text-shadow: 1px 2px 3px gray;
 }
