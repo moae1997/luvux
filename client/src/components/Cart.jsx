@@ -38,7 +38,11 @@ export default function Cart({user, setProduct}) {
     }
 
     async function buyAllNow() {
-        
+        GetCart(user).then((result)=>{
+            result.map((item)=>{
+                buyNow(item.product_id, item.id);
+            });
+        });
     }
 
     async function buyNow(productID, itemID) {

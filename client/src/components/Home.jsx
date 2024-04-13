@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { FetchProducts, MakeCart, GetCart, UpdateCountCart } from "./Api";
+import { FetchProducts, MakeCart, MakeHistory } from "./Api";
 import { useNavigate } from "react-router-dom";
 
 export default function Home({user, token, setToken}) {
@@ -28,9 +28,13 @@ export default function Home({user, token, setToken}) {
         }
        
     }
-    async function buyNow() {
+    async function buyNow(productID) {
         if (token) {
-           
+            MakeHistory(user, productID).then(()=>{
+                scroll(0,0);
+                setAddedtoCart("Congrats!! Your order is on it's way!!");
+                setTimeout(myFunction, 3000);
+            })
         }else {
             scroll(0,0);
             setAddedtoCart("Please login before you buy!");
@@ -63,6 +67,10 @@ export default function Home({user, token, setToken}) {
         setToken(null);
     }
 
+    async function myFunction(){
+        setAddedtoCart("");
+    }
+
     return (
         <>
             <div>
@@ -83,7 +91,7 @@ export default function Home({user, token, setToken}) {
                         <h1>{product.name}</h1>
                         <h2>${product.price}</h2>
                         <button onClick={()=>{addToCart(product.id)}}>Add to Cart</button>
-                        <button onClick={buyNow}>Buy Now</button>
+                        <button onClick={()=>{buyNow(product.id)}}>Buy Now</button>
                     </div>
                 })}
             </div>

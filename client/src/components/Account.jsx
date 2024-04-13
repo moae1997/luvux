@@ -24,6 +24,12 @@ export default function Account({user, setToken, setHistoryProduct}) {
         setHistoryProduct(historyID);
         navigate("/producthistory");
     }
+
+    function convertISOToNormal(isoDate) {
+        const date = new Date(isoDate);
+        return date.toLocaleString();
+    }
+
     return (
         <>
             <button onClick={goToProducts}>products</button>
@@ -34,7 +40,7 @@ export default function Account({user, setToken, setHistoryProduct}) {
                 {history.map((history)=>{
                     return <div key={history.id}>
                         <p>ProductID: {history.product_id}</p>
-                        <p>Last Purchased: {history.last_purchased}</p>
+                        <p>Last Purchased: {convertISOToNormal(history.last_purchased)}</p>
                     <button onClick={()=>{fectchItem(history.product_id)}}>Click to See</button>
                     </div>
                 })}
