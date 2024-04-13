@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function SingleHistory({historyProduct}) {
 
     const [item, setItem] = useState({});
-    const navigate = useNavigate();
+     const navigate = useNavigate();
 
     useEffect(()=>{
         FetchProduct(historyProduct).then(setItem);
@@ -15,7 +15,7 @@ export default function SingleHistory({historyProduct}) {
     return (
         <>
             <div>
-                <h1>{item.name}</h1>
+                <img src={item.iamgeurl} alt="soap" width="300" height="300" />
                 <h1>{item.name}</h1>
                 <p>${item.price}</p>
                 <button onClick={()=>{

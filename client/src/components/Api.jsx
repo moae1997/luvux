@@ -141,3 +141,18 @@ export async function removeProduct(userID, cartID) {
         }
 }
 
+export async function MakeHistory(customerID, user) {
+  try {
+      const response = await fetch(pathforapi + `customers/${customerID}/cartHistory`, {
+      method: "POST",    
+      headers: { 
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({product_id: user})
+    });
+      const result = await response.json();
+      return result;
+    } catch (error) {
+          return error;
+        }
+}

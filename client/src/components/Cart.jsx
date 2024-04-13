@@ -1,11 +1,12 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { GetCart, UpdateCountCart, removeProduct } from "./Api";
+import { GetCart, UpdateCountCart, removeProduct, MakeHistory } from "./Api";
 import { useNavigate } from "react-router-dom";
 
 export default function Cart({user, setProduct}) {
 
     const [cartItem, setItems] = useState([]);
+    const [buymessage, setBuymessage] = useState("");
     const navigate = useNavigate();
 
     useEffect(()=>{
@@ -40,12 +41,24 @@ export default function Cart({user, setProduct}) {
         
     }
 
-    async function buyNow() {
-        
+    async function buyNow(productID, itemID) {
+        MakeHistory(user, productID).then(()=>{
+            removefromcart(itemID);
+        }).then(()=>{
+            scroll(0,0);
+            setBuymessage("Congrats!! Your order is on it's way!!");
+            setTimeout(myFunction, 3000);
+        })
     }
+
+    async function myFunction(){
+        setBuymessage("");
+    }
+
 
     return(
         <>
+            <h1>{buymessage}</h1>
             <div>
                 {cartItem.map((item)=>{
                     return <div key={item.id}>
@@ -55,7 +68,7 @@ export default function Cart({user, setProduct}) {
                     <button onClick={()=>{Update(item.id, item.how_many)}}>Decrease Quantity</button>
                     <button onClick={()=>{UpdatePlus(item.id, item.how_many)}}>Increase Quantity</button>
                     <button onClick={()=>{removefromcart(item.id)}}>Remove</button>
-                    <button onClick={buyNow}>Buy Now</button>
+                    <button onClick={()=>{buyNow(item.product_id, item.id)}}>Buy Now</button>
                     </div>
                 })}
             </div>
